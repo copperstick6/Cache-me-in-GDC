@@ -1,0 +1,23 @@
+.Intro {
+	font-family: 'Shadows Into Light', cursive;
+	margin: 0;
+
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  background: url("parchment.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.user{
+	font-family: 'Dokdo', cursive;
+}
+.warning{
+	margin-bottom: 5px
+}
