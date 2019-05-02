@@ -12,6 +12,7 @@ export default class Navigation extends Component{
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
+        <Nav.Link href="/map">Home</Nav.Link>
           <NavDropdown title="1st Floor" id="collasible-nav-dropdown">
             <NavDropdown.Item href="/room/1.304">1.304</NavDropdown.Item>
             <NavDropdown.Item href="/room/Basement%20Lab">Basement Lab</NavDropdown.Item>
@@ -35,8 +36,8 @@ export default class Navigation extends Component{
           </NavDropdown>
           <NavDropdown title="5th Floor" id="collasible-nav-dropdown">
           <NavDropdown.Item href="/room/5th%20Floor%20Atrium">Atrium</NavDropdown.Item>
-          <NavDropdown.Item href="/room/5.302">4.302</NavDropdown.Item>
-          <NavDropdown.Item href="/room/5.304">4.304</NavDropdown.Item>
+          <NavDropdown.Item href="/room/5.302">5.302</NavDropdown.Item>
+          <NavDropdown.Item href="/room/5.304">5.304</NavDropdown.Item>
           <NavDropdown.Item href="/room/5th%20Floor%20Research%20Area">Research Areas</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="6th Floor" id="collasible-nav-dropdown">
