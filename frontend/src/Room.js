@@ -1,15 +1,12 @@
 import React, {Component} from 'react'
 import './Map.css'
 import Navigation from './Navbar.js'
-import Media from 'react-bootstrap/Media'
-import building from './cs.jpg'
 
-export default class Map extends Component{
+export default class Room extends Component{
   constructor(props){
     super(props)
     this.state={
-      totalUsers: 221,
-
+		totalUsers: 15
     }
   }
   componentDidMount(){
@@ -21,10 +18,10 @@ export default class Map extends Component{
     return(
       <div className = "bg-root">
         <Navigation />
-        <div className='header-image'></div>
         <div className="info">
         <br />
-        <center><h2>Total Users online: {this.state.totalUsers}</h2></center>
+        <center><h2>{this.props.match.params.roomid}</h2></center>
+		<center><h4>Users in Room: {this.state.totalUsers}</h4></center>
 
         </div>
       </div>

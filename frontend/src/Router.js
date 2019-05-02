@@ -4,6 +4,7 @@ import {Route, Switch} from 'react-router-dom'
 /* eslint-enable no-unused-vars */
 import Splash from './Splash'
 import Map from './Map'
+import Room from './Room'
 
 /**
  * Router for client side routing of the frontend application
@@ -14,6 +15,7 @@ export default class DefaultRouter extends Component {
       <Switch>
         <Route exact path="/" component={Splash}/>
         <Route exact path="/map" component = {Map}/>
+        <Route path="/room/:roomid" component={Room}/>
       </Switch>
     )
   }
