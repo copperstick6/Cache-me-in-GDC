@@ -20,7 +20,7 @@ def load(filename, W=64, H=64):
     except Exception as e:
         print('Check if the filepath of the dataset is {}'.format(os.path(filename)))
 
-    images, labels = data[:, :-1], data[:, -1]
+    images, labels = data[:-1], data[3]
     print(images)
     print(labels)
     return images, labels
