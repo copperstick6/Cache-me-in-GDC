@@ -6,7 +6,7 @@ Module that contains that contains a couple of utility functions
 import numpy as np
 import os
 
-def load(filename, W=64, H=64):
+def load(filename):
 
     """
     Loads the data that is provided
@@ -16,11 +16,11 @@ def load(filename, W=64, H=64):
     """
 
     try:
-        data = np.fromfile(filename, dtype=np.uint8)
+        
+        data = np.load(filename)
     except Exception as e:
         print('Check if the filepath of the dataset is {}'.format(os.path(filename)))
-
-    images, labels = data[:-1], data[3]
-    print(images)
-    print(labels)
+    print(data)
+    print(data.shape)
+    images, labels = data[:,:3], data[:,3:4]
     return images, labels
