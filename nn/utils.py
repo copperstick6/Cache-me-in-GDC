@@ -5,6 +5,7 @@ Module that contains that contains a couple of utility functions
 
 import numpy as np
 import os
+import torch
 
 def load(filename):
 
@@ -16,8 +17,9 @@ def load(filename):
     """
 
     try:
-        
+
         data = np.load(filename)
+        data = torch.Tensor(data)
     except Exception as e:
         print('Check if the filepath of the dataset is {}'.format(os.path(filename)))
     print(data)

@@ -25,50 +25,45 @@ def train(iterations, batch_size=64, log_dir=None):
     """
     Load the training data
     """
+    model=MainDeep()
+    inputs, labels = load(os.path.join('datasets/numpy_data.npy'))
 
-    train_inputs, train_labels = load(os.path.join('datasets/numpy_data.npy'))
+    criterion = nn.MSELoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
 
-    model = ConvNetModel()
+    running_loss = 0.0
 
+    epochs = 100
+    for ep in range(epochs):
+        # In this example, we will use the same input tensor each time, but ideally you should be dividing your
+        # data in small minibatches and train one batch in one iteration
+        for i in range(100 * ep, 100*(ep+1)):
 
-    # We use the ADAM optimizer with default learning rate (lr)
-    # If your model does not train well, you may swap out the optimizer or change the lr
-    optimizer = optim.Adam(model.parameters(), lr = 1e-3)
-    loss = nn.CrossEntropyLoss()
+            # Set the state of the model to 'train'. This is important for backpropagation step about which you
+            # learn in the next class. Backpropagation requires the values computed in the forward() function for
+            # each layer. Invoking the .train() function directs the model to save these values for future
+            # backpropagation step.
+            model.train()
 
-    for iteration in range(iterations):
-        model.train()
-        # Construct a mini-batch
-        batch = np.random.choice(train_inputs.shape[0], batch_size)
-        batch_inputs = torch.as_tensor(train_inputs[batch], dtype=torch.float32)
-        batch_labels = torch.as_tensor(train_labels[batch], dtype=torch.long)
+            # Very important to reset the gradients to zero before training a minibatch. Otherwise it will keep
+            # adding to gradients computed in the previous iterations
+            optimizer.zero_grad()
 
+            # print (inputs, labels)
 
-        # zero the gradients (part of pytorch backprop)
-        optimizer.zero_grad()
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
 
-        # Compute the model output and loss (view flattens the input)
-        model_outputs = model(batch_inputs)
-        t_loss_val = loss(model_outputs, batch_labels)
-        t_acc_val = accuracy(model_outputs, batch_labels)
+            # Perform the backpropagation step to compute gradients
+            loss.backward()
+            # Perform the gradient update
+            optimizer.step()
 
-
-        # Compute the gradient
-        t_loss_val.backward()
-
-        # Update the weights
-        optimizer.step()
-
-        if iteration % 10 == 0:
-            model.eval()
-
-            print('[%5d]'%iteration, 'loss = %f'%t_loss_val, 'acc = %f'%t_acc_val)
-            if log is not None:
-                log.add_scalar('train/loss', t_loss_val, iteration)
-                log.add_scalar('train/acc', t_acc_val, iteration)
-
+            running_loss += loss.item()
+        running_loss = 0.
     # Save the trained model
-    torch.save(model.state_dict(), os.path.join(dirname, 'convnet.th')) # Do NOT modify this line
+    dirname = os.path.dirname(os.path.abspath(__file__)) # Do NOT modify this line
+    torch.save(model.state_dict(), os.path.join(dirname, 'deep')) # Do NOT modify this line
 
 if __name__ == '__main__':
 
