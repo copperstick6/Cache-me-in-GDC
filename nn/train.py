@@ -41,7 +41,6 @@ def train(iterations, batch_size=64, log_dir=None):
         # Construct a mini-batch
         batch = np.random.choice(train_inputs.shape[0], batch_size)
         batch_inputs = torch.as_tensor(train_inputs[batch], dtype=torch.float32)
-        batch_inputs = batch_inputs.permute(0, 3, 1, 2)
         batch_labels = torch.as_tensor(train_labels[batch], dtype=torch.long)
 
 
