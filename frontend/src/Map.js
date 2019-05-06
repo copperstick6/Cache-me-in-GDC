@@ -3,12 +3,13 @@ import './Map.css'
 import Navigation from './Navbar.js'
 import Media from 'react-bootstrap/Media'
 import building from './cs.jpg'
+import data from './sample.json'
 
 export default class Map extends Component{
   constructor(props){
     super(props)
     this.state={
-      totalUsers: 221,
+      totalUsers: data['sta'].length,
 
     }
   }
