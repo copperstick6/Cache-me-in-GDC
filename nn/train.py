@@ -14,7 +14,7 @@ dirname = os.path.dirname(os.path.abspath(__file__))
 
 def accuracy(outputs, labels):
     outputs_idx = outputs.max(1)[1].type_as(outputs)
-    return outputs_idx.eq(labels.float()).float().mean()
+    return np.mean(outputs_idx.data.numpy() == labels.view(-1).data.numpy(), keepdims=True)
 
 def train(iterations, batch_size=16, log_dir=None):
     '''
