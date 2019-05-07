@@ -16,7 +16,7 @@ def accuracy(outputs, labels):
     outputs_idx = outputs.max(1)[1].type_as(outputs)
     return outputs_idx.eq(labels.float()).float().mean()
 
-def train(iterations, batch_size=64, log_dir=None):
+def train(iterations, batch_size=4, log_dir=None):
     '''
     This is the main training function, feel free to modify some of the code, but it
     should not be required to complete the assignment.
@@ -25,42 +25,46 @@ def train(iterations, batch_size=64, log_dir=None):
     """
     Load the training data
     """
-    model=MainDeep()
+    model=ConvNetModel()
     inputs, labels = load(os.path.join('datasets/numpy_data.npy'))
 
     criterion = nn.MSELoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+    optimizer = optim.Adam(model.parameters(), lr = 1e-3)
 
     running_loss = 0.0
+    print(iterations)
 
-    epochs = 100
-    for ep in range(epochs):
-        # In this example, we will use the same input tensor each time, but ideally you should be dividing your
-        # data in small minibatches and train one batch in one iteration
-        for i in range(100 * ep, 100*(ep+1)):
+    for iteration in range(iterations):
+        batch = np.random.choice(inputs.shape[0], batch_size)
+        batch_inputs = torch.as_tensor(inputs[batch], dtype=torch.float32)
+        batch_labels = torch.as_tensor(labels[batch], dtype=torch.float32)
 
-            # Set the state of the model to 'train'. This is important for backpropagation step about which you
-            # learn in the next class. Backpropagation requires the values computed in the forward() function for
-            # each layer. Invoking the .train() function directs the model to save these values for future
-            # backpropagation step.
-            model.train()
+        # Set the state of the model to 'train'. This is important for backpropagation step about which you
+        # learn in the next class. Backpropagation requires the values computed in the forward() function for
+        # each layer. Invoking the .train() function directs the model to save these values for future
+        # backpropagation step.
+        model.train()
 
-            # Very important to reset the gradients to zero before training a minibatch. Otherwise it will keep
-            # adding to gradients computed in the previous iterations
-            optimizer.zero_grad()
+        # Very important to reset the gradients to zero before training a minibatch. Otherwise it will keep
+        # adding to gradients computed in the previous iterations
+        optimizer.zero_grad()
 
-            # print (inputs, labels)
 
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
+        outputs = model(batch_inputs)
+        loss = criterion(outputs, batch_labels)
+        t_acc_val = accuracy(outputs, batch_labels)
 
-            # Perform the backpropagation step to compute gradients
-            loss.backward()
-            # Perform the gradient update
-            optimizer.step()
+        # Perform the backpropagation step to compute gradients
+        loss.backward()
+        # Perform the gradient update
+        optimizer.step()
 
-            running_loss += loss.item()
-        running_loss = 0.
+        if iteration % 10 == 0:
+            model.eval()
+
+            print('[%5d]'%iteration, 'loss = %f'%loss, 'acc = %f'%t_acc_val)
+
+        running_loss += loss.item()
     # Save the trained model
     dirname = os.path.dirname(os.path.abspath(__file__)) # Do NOT modify this line
     torch.save(model.state_dict(), os.path.join(dirname, 'deep')) # Do NOT modify this line
@@ -68,7 +72,7 @@ def train(iterations, batch_size=64, log_dir=None):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--iterations', type=int, default=10000)
+    parser.add_argument('-i', '--iterations', type=int, default=200)
     parser.add_argument('-l', '--log_dir')
     args = parser.parse_args()
 
