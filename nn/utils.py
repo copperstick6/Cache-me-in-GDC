@@ -19,10 +19,8 @@ def load(filename):
     try:
 
         data = np.load(filename)
-        print(data.shape)
         data = torch.Tensor(data)
     except Exception as e:
         print('Check if the filepath of the dataset is {}'.format(os.path(filename)))
     images, labels = data[:,:3], data[:,3:4]
-    print(images.shape)
     return images, labels

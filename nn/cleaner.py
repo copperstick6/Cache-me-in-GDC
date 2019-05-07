@@ -3,6 +3,7 @@ import numpy as np
 from os import listdir
 import os
 from os.path import isfile, join
+from random import shuffle
 
 
 test = os.listdir("datasets")
@@ -13,10 +14,13 @@ for item in test:
 
 datasets = [f for f in listdir("datasets") if isfile(join("datasets", f))]
 
-final_arr = []
+
+train_set = []
+test_set = []
 
 for i in range(0, len(datasets)):
     f = open("datasets/"+datasets[i], "r")
+    class_item = []
     for line in f:
         line = line[:-1]
         line_item = line.split(" ")
@@ -24,8 +28,13 @@ for i in range(0, len(datasets)):
         line_item[2].replace("\n", "")
         line_item = [0 if x =="0" else int(x) + 100 for x in line_item]
         line_item.append(i)
-        final_arr.append(line_item)
-numpy_arr = np.array(final_arr)
-print(numpy_arr)
+        class_item.append(line_item)
+    train_set += class_item[len(class_item)//2:]
+    test_set += class_item[:len(class_item)//2]
+train_arr = np.array(train_set)
+print(train_arr)
+test_arr = np.array(test_set)
 
-np.save("datasets/numpy_data", numpy_arr)
+
+np.save("datasets/train_data", train_arr)
+np.save("datasets/test_data", test_arr)

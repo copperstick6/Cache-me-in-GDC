@@ -12,7 +12,7 @@ from models import *
 dirname = os.path.dirname(os.path.abspath(__file__))
 
 def test(iterations, batch_size=256):
-    train_inputs, train_labels = load(os.path.join('datasets/numpy_data.npy'))
+    train_inputs, train_labels = load(os.path.join('datasets/test_data.npy'))
 
     model = ConvNetModel()
     pred = lambda x: np.argmax(x.detach().numpy(), axis=1)
@@ -26,10 +26,8 @@ def test(iterations, batch_size=256):
         batch = np.random.choice(train_inputs.shape[0], batch_size)
         batch_inputs = torch.as_tensor(train_inputs[batch], dtype=torch.float32)
         pred_val = torch.Tensor(pred(model(batch_inputs)))
-        print(train_labels[batch].view(-1))
-        print(pred_val)
         accuracies.append( np.mean(pred_val.data.numpy() == train_labels[batch].view(-1).data.numpy(), keepdims= True) )
-        print(accuracies)
+    print(accuracies)
     print( 'Accuracy ', np.mean(accuracies), '+-', np.std(accuracies)/np.sqrt(len(accuracies)))
 
 

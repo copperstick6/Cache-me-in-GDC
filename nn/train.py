@@ -16,7 +16,7 @@ def accuracy(outputs, labels):
     outputs_idx = outputs.max(1)[1].type_as(outputs)
     return outputs_idx.eq(labels.float()).float().mean()
 
-def train(iterations, batch_size=4, log_dir=None):
+def train(iterations, batch_size=16, log_dir=None):
     '''
     This is the main training function, feel free to modify some of the code, but it
     should not be required to complete the assignment.
@@ -26,9 +26,9 @@ def train(iterations, batch_size=4, log_dir=None):
     Load the training data
     """
     model=ConvNetModel()
-    inputs, labels = load(os.path.join('datasets/numpy_data.npy'))
+    inputs, labels = load(os.path.join('datasets/train_data.npy'))
 
-    criterion = nn.MSELoss()
+    loss = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr = 1e-3)
 
     running_loss = 0.0
@@ -37,7 +37,7 @@ def train(iterations, batch_size=4, log_dir=None):
     for iteration in range(iterations):
         batch = np.random.choice(inputs.shape[0], batch_size)
         batch_inputs = torch.as_tensor(inputs[batch], dtype=torch.float32)
-        batch_labels = torch.as_tensor(labels[batch], dtype=torch.float32)
+        batch_labels = torch.as_tensor(labels[batch], dtype=torch.long)
 
         # Set the state of the model to 'train'. This is important for backpropagation step about which you
         # learn in the next class. Backpropagation requires the values computed in the forward() function for
@@ -51,20 +51,19 @@ def train(iterations, batch_size=4, log_dir=None):
 
 
         outputs = model(batch_inputs)
-        loss = criterion(outputs, batch_labels)
+        t_loss_val = loss(outputs, batch_labels.squeeze())
         t_acc_val = accuracy(outputs, batch_labels)
 
         # Perform the backpropagation step to compute gradients
-        loss.backward()
+        t_loss_val.backward()
         # Perform the gradient update
         optimizer.step()
 
         if iteration % 10 == 0:
             model.eval()
 
-            print('[%5d]'%iteration, 'loss = %f'%loss, 'acc = %f'%t_acc_val)
+            print('[%5d]'%iteration, 'loss = %f'%t_loss_val, 'acc = %f'%t_acc_val)
 
-        running_loss += loss.item()
     # Save the trained model
     dirname = os.path.dirname(os.path.abspath(__file__)) # Do NOT modify this line
     torch.save(model.state_dict(), os.path.join(dirname, 'deep')) # Do NOT modify this line
