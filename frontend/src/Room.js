@@ -17,7 +17,6 @@ export default class Room extends Component{
     this.handleSearch = this.handleSearch.bind(this)
   }
   componentDidMount(){
-      console.log(process.env.REACT_APP_API_TOKEN)
       axios.get('https://cors-anywhere.herokuapp.com/https://cachemeinthegdc.herokuapp.com/api/get_devices', {
           headers:{
               'token': process.env.REACT_APP_API_TOKEN
@@ -74,11 +73,11 @@ export default class Room extends Component{
 			  <Card style={{ width: '16rem' }}>
 			  <Card.Body>
 			    <Card.Title>MAC Address: {user['mac']}</Card.Title>
-				<Card.Subtitle className="mb-2 text-muted">Last Seen: {user['last_seen1']}</Card.Subtitle>
+				<Card.Subtitle className="mb-2 text-muted">Last Seen: {(user['last_seen1'] != "0" ? user['last_seen1'] : (user['last_seen2'] != "0"? user['last_seen2']: user['last_seen3']))}</Card.Subtitle>
 			    <Card.Text>
 			      <ul>
 				  	<li>
-					Sensor 1 Power: {user['power1']}
+					Sensor 1 Power: {user['power1']}<br />
 					</li>
 					<li>
 					Sensor 2 Power: {user['power2']}
