@@ -33,11 +33,11 @@ export default class Room extends Component{
                     elems = response.data.filter(item => item.room == 5 || item.room == 6)
                     this.setState({userData: elems, totalUsers: elems.length, displayedData: elems})
                     break;
-                  case "3rd Floor Lab":
+                  case "4.302":
                     elems = response.data.filter(item => item.room == 7 || item.room == 8 || item.room == 9 || item.room == 10 || item.room == 11 || item.room == 12)
                     this.setState({userData: elems, totalUsers: elems.length, displayedData: elems})
                     break;
-                  case "4.302":
+                  case "3rd Floor Lab":
                     elems = response.data.filter(item => item.room == 13 || item.room == 14 || item.room == 15 || item.room == 16 )
                     this.setState({userData: elems, totalUsers: elems.length, displayedData: elems})
                     break;
@@ -46,7 +46,7 @@ export default class Room extends Component{
       }.bind(this))
   }
   handleSearch(event){
-      let filtered_item = this.state.userData.filter(item => item.mac.includes(event.target.value) )
+      let filtered_item = this.state.userData.filter(item => item.mac.toLowerCase().includes(event.target.value.toLowerCase() ))
       this.setState({displayedData: filtered_item})
   }
   render(){
