@@ -9,9 +9,9 @@ import json
 from models import *
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def evaluateModel():
-    data = request.args.get("json")
+    data = request.form.get("json")
     data = json.loads(data)
     model = ConvNetModel()
     pred = lambda x: np.argmax(x.detach().numpy(), axis=1)
