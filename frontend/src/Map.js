@@ -17,7 +17,7 @@ export default class Map extends Component{
       //make request here
       axios.get('https://cors-anywhere.herokuapp.com/https://cachemeinthegdc.herokuapp.com/api/get_devices', {
           headers:{
-              'token': ';/dnG}W\'k]0Pe!)'
+              'token': process.env.REACT_APP_API_TOKEN
           }
       }).then(function(response){
           console.log(response.data)
