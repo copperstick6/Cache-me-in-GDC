@@ -3,18 +3,26 @@ import './Map.css'
 import Navigation from './Navbar.js'
 import Media from 'react-bootstrap/Media'
 import building from './cs.jpg'
-import data from './sample.json'
+import axios from 'axios'
 
 export default class Map extends Component{
   constructor(props){
     super(props)
     this.state={
-      totalUsers: data['sta'].length,
+      totalUsers: '',
 
     }
   }
   componentDidMount(){
       //make request here
+      axios.get('https://cors-anywhere.herokuapp.com/https://cachemeinthegdc.herokuapp.com/api/get_devices', {
+          headers:{
+              'token': ';/dnG}W\'k]0Pe!)'
+          }
+      }).then(function(response){
+          console.log(response.data)
+          this.setState({totalUsers: response.data.length})
+      }.bind(this))
 
   }
 
